@@ -1,0 +1,31 @@
+{
+	"sap.app": {
+		"id": "sap.m.sample.ButtonWithBadge",
+		"applicationVersion": {
+			"version": "1.0.0"
+		},
+		"title": "Button With Badge Sample"
+	},
+	"sap.ui5": {
+		"rootView": {
+			"viewName": "sap.m.sample.ButtonWithBadge.Page",
+			"type": "XML",
+			"async": true
+		},
+		"dependencies": {
+			"libs": {
+				"sap.m": {}
+			}
+		},
+		"config": {
+			"sample": {
+				"stretch": true,
+				"files": [
+					"Page.view.xml",
+					"Page.controller.js",
+					"manifest.json"
+				]
+			}
+		}
+	}
+}

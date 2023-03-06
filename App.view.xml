@@ -1,0 +1,133 @@
+<mvc:View
+        controllerName="Quickstart.App"
+        displayBlock="true"
+        height="100%"
+        xmlns="sap.m"
+        xmlns:f="sap.f"
+        xmlns:mvc="sap.ui.core.mvc"
+        xmlns:l="sap.ui.layout"
+        xmlns:core="sap.ui.core">
+    <App id="app">
+
+        <Page
+                id="basePage"
+                title="My App"
+                showHeader="true">
+            <customHeader>
+                <f:ShellBar
+                        title="{/launchpadTitle}"
+                        secondTitle="{/activeAppTitle}"
+                        homeIcon="./images/sap.png"
+                        showNavButton="false"
+                        showCopilot="false"
+                        showMenuButton="false"
+                        showNotifications="false"
+                        showProductSwitcher="false"
+                        notificationsNumber="7"
+                        homeIconPressed="onHomePress"
+                        >
+                    <!-- <menu>
+                        <m:Menu>
+                            <m:MenuItem
+                                    text="Flight booking"
+                                    icon="sap-icon://flight" />
+                            <m:MenuItem
+                                    text="Car rental"
+                                    icon="sap-icon://car-rental" />
+                        </m:Menu>
+                    </menu> -->
+                    <f:profile>
+                        <f:Avatar
+                                initials="AM"
+                                backgroundColor="Random" />
+                    </f:profile>
+                    <f:searchManager>
+                        <f:SearchManager
+                                id="searchField"
+                                search="handlerSearchFieldSearch"
+                                liveChange="handlerSearchFieldLiveEvent"
+                                suggest="handlerSearchSuggestEvent"
+                                enableSuggestions="true"
+                                suggestionItems="{
+                                    path: '/ProductCollection',
+                                    sorter: { path: 'Name' }
+                                }">
+                            <f:suggestionItems>
+                                <SuggestionItem
+                                        text="{Name}"
+                                        description="{path:'Price'} {path:'CurrencyCode'}"
+                                        key="{ProductId}" />
+                            </f:suggestionItems>
+                        </f:SearchManager>
+                    </f:searchManager>
+                </f:ShellBar>
+
+            </customHeader>
+
+            <content>
+                <App
+                        id="x-app"
+                        isTopLevel="false"
+                        initialPage="tc-page">
+                    <pages>
+                        <Page
+                                id="tc-page"
+                                showHeader="false">
+                            <content>
+                                <IconTabHeader
+                                        id="baseTab"
+                                        mode="Inline"
+                                        backgroundDesign="Solid"
+                                        visible="true">
+                                    <items>
+                                        <IconTabFilter
+                                                key="info"
+                                                text="Home Page" />
+                                    </items>
+                                </IconTabHeader>
+                                <VBox class="sapUiMediumMarginBeginEnd">
+                                    <l:HorizontalLayout
+                                            id="TileContainerExpanded"
+                                            allowWrapping="true"
+                                            content="{/tiles}"
+                                            class="sapUiMediumMarginTop sapUiTinyMediumBottom sapUiContentPadding sapUiResponsivePadding">
+                                        <GenericTile
+                                                header="{title}"
+                                                subheader="{subtitle}"
+                                                state="{=${state} || 'Loaded'}"
+                                                scope="{/scope}"
+                                                press="onpressTile"
+                                                class="sapUiSmallMarginEnd sapUiSmallMarginBottom"
+                                                sizeBehavior="Responsive">
+                                            <TileContent
+                                                    unit="{unit}"
+                                                    footer="{footer}">
+                                                <NumericContent
+                                                        visible="false"
+                                                        withMargin="false"
+                                                        value="{kpivalue}"
+                                                        valueColor="{color}"
+                                                        indicator="{trend}"
+                                                        scale="{scale}" />
+                                            </TileContent>
+                                        </GenericTile>
+                                    </l:HorizontalLayout>
+                                </VBox>
+                            </content>
+                        </Page>
+                        <Page
+                                id="x-page"
+                                showHeader="false">
+                            <!-- <core:ComponentContainer
+                                    height="100%"
+                                    url="./repository/ButtonWithBadge"
+                                    name="sap.m.sample.ButtonWithBadge">
+                            </core:ComponentContainer> -->
+                        </Page>
+                    </pages>
+                </App>
+            </content>
+        </Page>
+
+    </App>
+</mvc:View>
