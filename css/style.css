@@ -1,0 +1,40 @@
+@charset "ISO-8859-1";
+
+.myShellTabBar {
+  background: #354a5f !important;
+  box-shadow: 0 0.125rem 0.125rem 0 rgb(0 0 0 / 8%),
+    inset 0 -0.0625rem 0 0 rgb(0 0 0 / 18%) !important;
+}
+
+/* hack: remove ::after gap from ShellBar */
+.sapMPage .sapMPageHeader:not(.sapMIBar-CTX):after,
+.sapMPageWithSubHeader .sapMPageSubHeader:not(.sapMIBar-CTX):after {
+  height: 0px !important;
+}
+
+/* hack: override Shell's ITB filter selected color */
+.sapMITBSelected .sapMITBContentArrow::after {
+  background: #cee5fc !important;
+}
+
+.sapMITBContentArrow::after {
+  border-radius: 0 !important;
+}
+
+.sapMITBTextOnly .sapMITBFilterDefault.sapMITBSelected .sapMITBText {
+  color: #cee5fc !important;
+}
+
+/* .sapMITBTextOnly .sapMITBFilterDefault.sapMITBSelected .sapMITBText {
+    color: #cee5fc !important;
+} */
+
+.sapMITBTextOnly .sapMITBFilterDefault .sapMITBText {
+  color: #fff !important;
+  text-shadow: none !important;
+}
+
+.sapMITBTextOnly .sapMITBFilterDefault:hover .sapMITBText {
+  color: #cee5fc !important;
+  text-shadow: none !important;
+}
