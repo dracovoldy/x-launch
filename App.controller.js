@@ -4,51 +4,88 @@ sap.ui.define([
 	"sap/ui/model/json/JSONModel",
 	"sap/ui/core/Component",
 	"sap/ui/core/ComponentContainer",
-	"sap/ui/core/library"
-], function (Controller, MessageToast, JSONModel, Component, ComponentContainer, coreLibrary) {
+	"sap/ui/core/library",
+	"sap/ui/core/routing/HashChanger"
+], function (Controller, MessageToast, JSONModel, Component, ComponentContainer, coreLibrary, HashChanger) {
 	"use strict";
 
 	return Controller.extend("Quickstart.App", {
-		onPress: function () {
-			MessageToast.show("Hello UI5!");
-			this.byId("app").to(this.byId("intro"));
-		},
 
 		onInit: function () {
+			this.getView().addStyleClass("sapUiSizeCompact");
+
 			this.getView().setModel(new JSONModel({
 				launchpadTitle: "Launchpad",
 				activeAppTitle: "<App Title>",
-				features: [
-					"Enterprise-Ready Web Toolkit",
-					"Powerful Development Concepts",
-					"Feature-Rich UI Controls",
-					"Consistent User Experience",
-					"Free and Open Source",
-					"Responsive Across Browsers and Devices"
-				],
 				tiles: [
 					{
-						title: "test tile",
-						subtitle: "subtitle",
+						title: "Button Sample",
+						subtitle: "Official UI5 sample",
 						state: "Loaded",
+						targetMapping: "ZSemanticObj-action",
+						url: "./repository/ButtonWithBadge",
+						componentId: "sap.m.sample.ButtonWithBadge",
 					},
 					{
-						title: "test tile",
-						subtitle: "subtitle",
+						title: "Object Page Sample",
+						subtitle: "Header Content Priorities",
 						state: "Loaded",
-					},
-					{
-						title: "test tile",
-						subtitle: "subtitle",
-						state: "Loaded",
+						targetMapping: "ZObjPage-headercontent",
+						url: "./repository/sap.uxap.sample.ObjectPageHeaderContentPriorities",
+						componentId: "sap.uxap.sample.ObjectPageHeaderContentPriorities",
 					},
 				]
 			}));
+
+
+			this.oHashChanger = new HashChanger({
+				id: "hashChanger",
+				hashSet: function (oEvent) {
+					debugger;
+				}
+			});
+
+			this.oHashChanger.init()
 		},
 
-		onChange: function (oEvent) {
-			var bState = oEvent.getParameter("state");
-			this.byId("ready").setVisible(bState);
+		onAfterRendering: function () {
+
+			// Handle intial load hash
+			var that = this;
+			var navCon = this.byId("x-app");
+			var sViewport = "x-page";
+			var sHash = this.oHashChanger.getHash();
+
+			if (sHash) {
+
+				var aTiles = this.getView().getModel().getProperty("/tiles");
+
+				var oTileMatched = aTiles.find(function (oTile) {
+					if (oTile.targetMapping === sHash) {
+						return true;
+					}
+					return false;
+				});
+
+				this.handleNav(navCon, sViewport, null, oTileMatched.targetMapping);
+
+				this.getView().byId("x-page")
+					.addContent(new ComponentContainer({
+						height: "100%",
+						url: oTileMatched.url,
+						name: oTileMatched.componentId,
+						lifecycle: coreLibrary.ComponentLifecycle.Container,
+						componentCreated: function (evt) {
+							// debugger;
+							var oManifest = evt.getParameter("component").getManifest();
+							console.log(oManifest);
+							var oModel = that.getView().getModel();
+							oModel.setProperty("/activeAppTitle", oManifest["sap.app"]["title"]);
+						}
+					}));
+
+			}
+
 		},
 
 		onHomePress: function (oEvent) {
@@ -56,27 +93,30 @@ sap.ui.define([
 			// location.reload();
 
 			var navCon = this.byId("x-app");
-			var target = "tc-page";
+			var sViewport = "tc-page";
 
-			this.handleNav(navCon, target, "show");
+			this.handleNav(navCon, sViewport, "show", null);
 
 			var page = this.byId("x-page");
 			page.destroyContent();
 
 		},
 
-		onpressTile: function (oEvent) {
+		onTilePress: function (oEvent) {
 			var that = this;
 			var navCon = this.byId("x-app");
-			var target = "x-page";
+			var sViewport = "x-page";
 
-			this.handleNav(navCon, target);
+			var oTile = oEvent.getSource().getBindingContext().getObject();
+			console.log(oTile);
+
+			this.handleNav(navCon, sViewport, null, oTile.targetMapping);
 
 			this.getView().byId("x-page")
 				.addContent(new ComponentContainer({
 					height: "100%",
-					url: "./repository/ButtonWithBadge",
-					name: "sap.m.sample.ButtonWithBadge",
+					url: oTile.url,
+					name: oTile.componentId,
 					lifecycle: coreLibrary.ComponentLifecycle.Container,
 					componentCreated: function (evt) {
 						// debugger;
@@ -88,13 +128,12 @@ sap.ui.define([
 				}));
 		},
 
-		handleNav: function (navCon, target, animation) {
+		handleNav: function (navCon, sViewport, animation, sHash) {
 
-			// var target = evt.getSource().data("target");
-			debugger;
-			// this.oHashChanger.setHash("Launchpad-openFLP");
-			if (target) {
-				navCon.to(this.byId(target), animation ? animation : "fade");
+			// var sViewport = evt.getSource().data("sViewport");
+			this.oHashChanger.setHash(sHash);
+			if (sViewport) {
+				navCon.to(this.byId(sViewport), animation ? animation : "fade");
 			} else {
 				navCon.back();
 			}

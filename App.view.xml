@@ -7,12 +7,13 @@
         xmlns:mvc="sap.ui.core.mvc"
         xmlns:l="sap.ui.layout"
         xmlns:core="sap.ui.core">
-    <App id="app">
+    <App id="app" class="myApp">
 
         <Page
                 id="basePage"
                 title="My App"
-                showHeader="true">
+                showHeader="true"
+                backgroundDesign="Solid">
             <customHeader>
                 <f:ShellBar
                         title="{/launchpadTitle}"
@@ -25,7 +26,7 @@
                         showProductSwitcher="false"
                         notificationsNumber="7"
                         homeIconPressed="onHomePress"
-                        >
+                        class="myShell">
                     <!-- <menu>
                         <m:Menu>
                             <m:MenuItem
@@ -61,7 +62,6 @@
                         </f:SearchManager>
                     </f:searchManager>
                 </f:ShellBar>
-
             </customHeader>
 
             <content>
@@ -72,20 +72,26 @@
                     <pages>
                         <Page
                                 id="tc-page"
-                                showHeader="false">
+                                showHeader="false"
+                                backgroundDesign="Transparent">
                             <content>
+
                                 <IconTabHeader
                                         id="baseTab"
-                                        mode="Inline"
+                                        mode="Standard"
                                         backgroundDesign="Solid"
-                                        visible="true">
+                                        visible="true"
+                                        class="myShellTabBar">
                                     <items>
                                         <IconTabFilter
                                                 key="info"
-                                                text="Home Page" />
+                                                text="My Home" />
+                                        <IconTabFilter
+                                                key="settings"
+                                                text="Settings" />
                                     </items>
                                 </IconTabHeader>
-                                <VBox class="sapUiMediumMarginBeginEnd">
+                                <VBox class="sapUiSmallMarginBeginEnd">
                                     <l:HorizontalLayout
                                             id="TileContainerExpanded"
                                             allowWrapping="true"
@@ -96,7 +102,7 @@
                                                 subheader="{subtitle}"
                                                 state="{=${state} || 'Loaded'}"
                                                 scope="{/scope}"
-                                                press="onpressTile"
+                                                press="onTilePress"
                                                 class="sapUiSmallMarginEnd sapUiSmallMarginBottom"
                                                 sizeBehavior="Responsive">
                                             <TileContent
